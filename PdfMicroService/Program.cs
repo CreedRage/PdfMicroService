@@ -1,4 +1,3 @@
-
 namespace PdfMicroService
 {
     public class Program
@@ -8,11 +7,22 @@ namespace PdfMicroService
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Configure CORS
+            builder.Services.AddCors(options =>
+            {
+                //options.AddPolicy("AllowSpecificOrigin",
+                //    builder => builder.WithOrigins("http://localhost:8000")
+                //                      .AllowAnyMethod()
+                //                      .AllowAnyHeader());
+                options.AddPolicy("AllowAll",
+                    builder => builder.AllowAnyOrigin()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
 
             var app = builder.Build();
 
@@ -20,12 +30,15 @@ namespace PdfMicroService
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseReDoc(c =>
+                {
+                    c.DocumentTitle = "REDOC API Documentation";
+                    c.SpecUrl = "/swagger/v1/swagger.json";
+                });
             }
 
+            app.UseCors("AllowAll");
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();

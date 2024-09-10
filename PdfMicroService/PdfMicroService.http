@@ -1,6 +1,5 @@
-@PdfMicroService_HostAddress = http://localhost:5227
+@PdfMicroService_HostAddress = http://localhost:32776/api/v1
 
-GET {{PdfMicroService_HostAddress}}/weatherforecast/
+POST {{PdfMicroService_HostAddress}}/checkPdf
 Accept: application/json
 
-###
